@@ -1,19 +1,25 @@
 import socket
 import sys
 
-IP = '127.0.0.1'
-PORT = 4025
+import socket
+from time import sleep
 
-# Create socket for server
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, 0)
-print("Do Ctrl+c to exit the program !!")
+interfaces = socket.getaddrinfo(host=socket.gethostname(), port=None, family=socket.AF_INET)
+allips = [ip[-1][0] for ip in interfaces]
+print(interfaces)
 
-# Let's send data through UDP protocol
+msg = b'hello world'
 while True:
-    send_data = input("Type some text to send =>");
-    s.sendto(send_data.encode('utf-8'), (IP, PORT))
-    print("\n\n 1. Client Sent : ", send_data, "\n\n")
-    data, address = s.recvfrom(4096)
-    print("\n\n 2. Client received : ", data.decode('utf-8'), "\n\n")
-# close the socket
-s.close()
+
+    for ip in allips:
+        print(f'sending on {ip}')
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)  # UDP
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        sock.bind((ip,0))
+        sock.sendto(msg, ("255.255.255.255", 5005))
+        sock.close()
+
+    sleep(2)
+
+
+main()
