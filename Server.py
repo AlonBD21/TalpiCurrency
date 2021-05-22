@@ -2,6 +2,10 @@ import ecdsa
 import socket
 from hashlib import sha256
 
+from BlockChain import *
+from Block import *
+from Client import *
+
 IP = '192.168.137.246'
 PORT = 1110
 

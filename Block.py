@@ -1,6 +1,6 @@
 import time
-import Merkle
-import Header
+from Header import *
+from Transaction import *
 
 class Block:
 

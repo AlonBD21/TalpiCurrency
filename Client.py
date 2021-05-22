@@ -1,14 +1,14 @@
 import socket
 import sys
-
-import socket
 from time import sleep
+
+from Transaction import *
 
 interfaces = socket.getaddrinfo(host=socket.gethostname(), port=None, family=socket.AF_INET)
 allips = [ip[-1][0] for ip in interfaces]
 print(interfaces)
 
-List[] =
+List = []
 
 
 msg = b'hello world'

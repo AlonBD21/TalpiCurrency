@@ -1,6 +1,5 @@
 from hashlib import sha256
 import random
-from math import sqrt
 
 ROUNDS = 50
 
