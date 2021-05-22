@@ -8,7 +8,13 @@ interfaces = socket.getaddrinfo(host=socket.gethostname(), port=None, family=soc
 allips = [ip[-1][0] for ip in interfaces]
 print(interfaces)
 
+List[] =
+
+
 msg = b'hello world'
+print(msg)
+print(type(msg))
+
 while True:
 
     for ip in allips:
@@ -21,5 +27,3 @@ while True:
 
     sleep(2)
 
-
-main()
