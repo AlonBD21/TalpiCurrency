@@ -1,4 +1,3 @@
-
 import ecdsa
 import socket
 from hashlib import sha256
