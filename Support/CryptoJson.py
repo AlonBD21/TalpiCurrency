@@ -15,7 +15,7 @@ class CryptoEncoder(json.JSONEncoder):
                     "receiver": o.get_receiver(),
                     "amount": o.get_amount(),
                     "time": o.get_time(),
-                    "singature": o.get_signature()
+                    "signature": o.get_signature()
                     }
         elif isinstance(o, Header):
             return {TYPE_FIELD: Header.__name__,
