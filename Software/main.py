@@ -1,4 +1,5 @@
 from Logic.User import *
+from Software.Server import *
 from Software.Client import *
 
 
@@ -13,7 +14,8 @@ def get_existing_user(sk):
 
 
 def mine(user):
-    pass
+    server = Server(user)
+    server.start_listening()
 
 
 def trade(user):

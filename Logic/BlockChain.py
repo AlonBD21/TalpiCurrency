@@ -16,6 +16,18 @@ class BlockChain:
         if self.can_be_added (block):
             self.blocks.append (block)
 
+    def is_valid(self):
+        last = None
+        for block in self.blocks:
+            if not block.is_solved():
+                return False
+            if last:
+                if last.hash () != block.header.__prev_hash:
+                    return False
+            else:
+                last = block
+        return self.check_all_balances ()
+
     def can_be_added(self, block):
         """
         check 3 thing: valid prev hash, valid nonce in block, valid balance for all users
