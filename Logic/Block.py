@@ -24,7 +24,7 @@ class Block:
         return s
 
     def set_nonce(self, nonce):
-        self.header.nonce = nonce
+        self.header.__nonce = nonce
 
     def get_transactions(self):
         return self.transactions
@@ -35,7 +35,7 @@ class Block:
     def is_solved(self):
         h = self.hash ()
         hashed = ''.join (format (x, '08b') for x in h)
-        for i in range (self.header.n_bits):
+        for i in range (self.header.__n_bits):
             if hashed[i] == '1':
                 return False
         return True

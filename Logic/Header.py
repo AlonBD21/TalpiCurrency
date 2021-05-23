@@ -6,19 +6,22 @@ from hashlib import sha256
 class Header:
     SEP = ","
 
-    def __init__(self, prev_hash, transactions, nonce, mined_by, n_bits=10):
-        self.prev_hash = prev_hash
-        self.create_merkle_root (transactions)
-        self.time = int (time ())
-        self.n_bits = n_bits
-        self.nonce = nonce
-        self.mined_by = mined_by
+    def __init__(self, prev_hash, transactions, nonce, miner,
+                 time_stamp=int(time()), n_bits=10):
+        self.__prev_hash = prev_hash
+        self.__root_hash = self.create_merkle_root(transactions)
+        self.__nonce = nonce
+        self.__miner = miner
+        self.__time_stamp = time_stamp
+        self.__n_bits = n_bits
+
 
     def create_merkle_root(self, transactions):
         if not transactions:
-            self.root_hash = "0" * 32
+            return "0" * 32
         else:
-            transactions = self.hash_all (transactions)  #TODO: implement merkle tree
+            transactions = self.hash_all(
+                transactions)  # TODO: implement merkle tree
             # width_of_tree = len (transactions)
             # while width_of_tree > 1:
             #     hashes = []
@@ -29,23 +32,44 @@ class Header:
             #             hashes.append (sha256(transactions[i] + transactions[i + 1]).digest ())
             #     width_of_tree = len (hashes)
             #     transactions = hashes
-            self.root_hash = transactions[0]
+            return transactions[0]
 
     def hash_all(self, transactions):
         hashed = []
         for trans in transactions:
-            hashed.append (sha256(str(trans).encode()).digest())
+            hashed.append(sha256(str(trans).encode()).digest())
         return hashed
 
     def __str__(self):
-        return str (self.prev_hash) + Header.SEP + str (self.root_hash) + Header.SEP + str (self.time) + Header.SEP + \
-               str (self.n_bits) + Header.SEP + str (self.nonce) + Header.SEP + str (self.mined_by)
+        return str(self.__prev_hash) + Header.SEP + str(
+            self.root_hash) + Header.SEP + str(
+            self.__time_stamp) + Header.SEP + \
+               str(self.__n_bits) + Header.SEP + str(
+            self.__nonce) + Header.SEP + str(self.__miner)
 
     def __repr__(self):
-        return "previous hash: " + str (self.prev_hash) + "\nmerkle hash: " + str (self.root_hash) + "\ntime: " + \
-               str (datetime.fromtimestamp (self.time)) + "\ntarget: " + str (self.n_bits) + "\nnonce: " + str (
-            self.nonce)+ "\nmined by: " + str (self.mined_by)
+        return "previous hash: " + str(
+            self.__prev_hash) + "\nmerkle hash: " + str(
+            self.root_hash) + "\ntime: " + \
+               str(datetime.fromtimestamp(
+                   self.__time_stamp)) + "\ntarget: " + str(
+            self.__n_bits) + "\nnonce: " + str(
+            self.__nonce) + "\nmined by: " + str(self.__miner)
 
-    def get_mined_by(self):
-        return self.mined_by
+    def get_miner(self):
+        return self.__miner
 
+    def get_prev_hash(self):
+        return self.__prev_hash
+
+    def get_root_hash(self):
+        return self.__root_hash
+
+    def get_nonce(self):
+        return self.__nonce
+
+    def get_n_bits(self):
+        return self.__n_bits
+
+    def get_time_stamp(self):
+        return self.__time_stamp
