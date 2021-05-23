@@ -1,8 +1,5 @@
-import time
-from hashlib import sha256
-
-from Header import *
-from Transaction import *
+from Logic.Header import *
+from Logic.Transaction import *
 
 
 class Block:

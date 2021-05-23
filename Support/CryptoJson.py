@@ -1,7 +1,7 @@
 import json
-from Transaction import Transaction
-from Block import Block
-from BlockChain import BlockChain
+from Logic.Transaction import Transaction
+from Logic.Block import Block
+from Logic.BlockChain import BlockChain
 
 TYPE_FIELD = '_type'
 

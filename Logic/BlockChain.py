@@ -1,4 +1,4 @@
-from Block import *
+from Logic.Block import *
 
 class BlockChain:
     SEP = "/"

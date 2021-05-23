@@ -1,8 +1,5 @@
 import socket
-import sys
 from time import sleep
-
-from Transaction import *
 
 if __name__ == "__main__":
     interfaces = socket.getaddrinfo(host=socket.gethostname(), port=None, family=socket.AF_INET)

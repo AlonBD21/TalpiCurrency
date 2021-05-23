@@ -1,5 +1,5 @@
 from hashlib import sha256
-from User import User
+from Logic.User import User
 import time
 
 
