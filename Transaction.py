@@ -6,7 +6,8 @@ import time
 class Transaction:
     SEP = ','
 
-    def __init__(self, sender, receiver, amount, time, signature=None):
+    def __init__(self, sender, receiver, amount, time_stamp=int(time.time()),
+                 signature=None):
         """
         Creates new Transaction
         :param sender: who sends the money, verifying key, bytes
@@ -17,7 +18,7 @@ class Transaction:
         self.__sender = sender
         self.__receiver = receiver
         self.__amount = amount
-        self.__time = time
+        self.__time = time_stamp
         self.__signature = signature
 
     @classmethod
@@ -68,6 +69,21 @@ class Transaction:
         if self.__signature is None:
             return False
         return User.verify(self.__sign_on(), self.__sender, self.__signature)
+
+    def get_sender(self):
+        return self.__sender
+
+    def get_receiver(self):
+        return self.__receiver
+
+    def get_signature(self):
+        return self.__signature
+
+    def get_time(self):
+        return self.__time
+
+    def get_amount(self):
+        return self.__amount
 
 
 if __name__ == '__main__':

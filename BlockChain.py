@@ -48,13 +48,14 @@ class BlockChain:
             s += repr (b)
         return s
 
-bc = BlockChain()
-# ph = bc.last_hash()
-# t = Transaction()
-# for i in range(10**10):
-#     b = Block(i,ph,t)
-#     if b.is_solved():
-#         bc.add_block(b)
-# print(bc)
-print(repr(bc))
+if __name__ == '__main__':
+    bc = BlockChain()
+    # ph = bc.last_hash()
+    # t = Transaction()
+    # for i in range(10**10):
+    #     b = Block(i,ph,t)
+    #     if b.is_solved():
+    #         bc.add_block(b)
+    # print(bc)
+    print(repr(bc))
 

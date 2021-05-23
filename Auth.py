@@ -1,6 +1,5 @@
 from hashlib import sha256
 import random
-
 ROUNDS = 50
 
 

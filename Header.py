@@ -45,7 +45,3 @@ class Header:
                str (datetime.fromtimestamp (self.time)) + "\ntarget: " + str (self.n_bits) + "\nnonce: " + str (
             self.nonce)
 
-
-# header1 = Header ("23567fac2332cd2312be2", ["Shachar,Alon,100"], nonce=874561)
-# print (repr (header1))
-# print (header1)
