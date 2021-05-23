@@ -4,10 +4,12 @@ import time
 
 
 class Transaction:
-    SEP = ','
+    SEP = 'ף'
+
 
     def __init__(self, sender, receiver, amount, time_stamp=int(time.time()),
                  signature=None):
+
         """
         Creates new Transaction
         :param sender: who sends the money, verifying key, bytes
@@ -31,8 +33,9 @@ class Transaction:
         fields = string.split(cls.SEP)
         signature = None
         if len(fields) == 5:
-            signature = bytes(fields[4])
-        return Transaction(bytes(fields[0]), bytes(fields[1]),
+            signature = bytes(fields[4], encoding='ascii')
+        return Transaction(bytes(fields[0], encoding='ascii'),
+                           bytes(fields[1], encoding='ascii'),
                            float(fields[2]), int(fields[3]), signature)
 
     def __str__(self):
@@ -42,6 +45,15 @@ class Transaction:
         fields = [str(self.__sender), str(self.__receiver), str(self.__amount),
                   str(int(self.__time)), str(self.__signature)]
         return self.SEP.join(fields)
+
+    def get_amount(self):
+        return self.__amount
+
+    def get_sender(self):
+        return self.__sender
+
+    def get_receiver(self):
+        return self.__receiver
 
     def sign(self, user):
         """
@@ -89,8 +101,9 @@ class Transaction:
 if __name__ == '__main__':
     alice = User.generate()
     bob = User.generate()
-    trans = Transaction(alice.get_vk_bytes(), bob.get_vk_bytes(), 100.5,
-                        int(time.time()))
+    trans = Transaction(alice.get_vk_bytes(), bob.get_vk_bytes(), 100.5)
     trans.sign(alice)
     print(trans)
     print(trans.verify())
+    new_trans = Transaction.from_string(str(trans))
+    print(new_trans)

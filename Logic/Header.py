@@ -6,18 +6,19 @@ from hashlib import sha256
 class Header:
     SEP = ","
 
-    def __init__(self, prev_hash, transactions, nonce, n_bits=10):
+    def __init__(self, prev_hash, transactions, nonce, mined_by, n_bits=10):
         self.prev_hash = prev_hash
         self.create_merkle_root (transactions)
         self.time = int (time ())
         self.n_bits = n_bits
         self.nonce = nonce
+        self.mined_by = mined_by
 
     def create_merkle_root(self, transactions):
         if not transactions:
             self.root_hash = "0" * 32
         else:
-            transactions = self.hash_all (transactions)  # three points when we want to implement merkle tree
+            transactions = self.hash_all (transactions)  #TODO: implement merkle tree
             # width_of_tree = len (transactions)
             # while width_of_tree > 1:
             #     hashes = []
@@ -38,10 +39,13 @@ class Header:
 
     def __str__(self):
         return str (self.prev_hash) + Header.SEP + str (self.root_hash) + Header.SEP + str (self.time) + Header.SEP + \
-               str (self.n_bits) + Header.SEP + str (self.nonce)
+               str (self.n_bits) + Header.SEP + str (self.nonce) + Header.SEP + str (self.mined_by)
 
     def __repr__(self):
         return "previous hash: " + str (self.prev_hash) + "\nmerkle hash: " + str (self.root_hash) + "\ntime: " + \
                str (datetime.fromtimestamp (self.time)) + "\ntarget: " + str (self.n_bits) + "\nnonce: " + str (
-            self.nonce)
+            self.nonce)+ "\nmined by: " + str (self.mined_by)
+
+    def get_mined_by(self):
+        return self.mined_by
 
