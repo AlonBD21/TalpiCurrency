@@ -4,16 +4,12 @@ from hashlib import sha256
 from Header import *
 from Transaction import *
 
-
+#TODO: make vavibles private in all classes
 class Block:
-    SEP = "|"
+    SEP = "ץ"
 
-    def __init__(self, nonce=0, prev_block=None, transactions=None):
-        if prev_block:
-            prev_hash = prev_block.hash()
-        else:
-            prev_hash = "0" * 32
-        self.header = Header (prev_hash, transactions, nonce)
+    def __init__(self, nonce=0, prev_hash="0" * 32, transactions=None, mined_by=None):
+        self.header = Header (prev_hash, transactions, nonce, mined_by)
         self.transactions = transactions
 
     def __str__(self):
@@ -30,16 +26,26 @@ class Block:
                 s += Block.SEP + str (t)
         return s
 
+    def set_nonce(self, nonce):
+        self.header.nonce = nonce
+
+    def get_transactions(self):
+        return self.transactions
+
+    def get_header(self):
+        return self.header
+
     def is_solved(self):
-        hashed = ''.join (format (x, '08b') for x in self.hash ())
+        h = self.hash ()
+        hashed = ''.join (format (x, '08b') for x in h)
         for i in range (self.header.n_bits):
-            if hashed[i]:
+            if hashed[i] == '1':
                 return False
         return True
 
     def hash(self):
-        h1 = sha256 (str(self.header).encode()).digest ()
-        h2 = sha256 (str(self.transactions).encode()).digest ()
-        hashed = sha256 (str(h1 + h2).encode()).digest ()
+        h1 = sha256 (str (self.header).encode ()).digest ()
+        h2 = sha256 (str (self.transactions).encode ()).digest ()
+        hashed = sha256 (str (h1 + h2).encode ()).digest ()
         return hashed
         # ''.join (format (x, '08b') for x in hashed)  if we want to make it binary
