@@ -5,9 +5,10 @@ from Logic.User import *
 from Logic.Transaction import *
 from Support.CryptoJson import *
 
+PORT = 8020
+
 
 class Client:
-    PORT = 8020
 
     def __init__(self, user):
         self.__user = user
@@ -22,7 +23,7 @@ class Client:
             sock = socket.socket (socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)  # UDP
             sock.setsockopt (socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
             sock.bind ((ip, 0))
-            sock.sendto (trans_json, ("255.255.255.255", Client.PORT))
+            sock.sendto (trans_json, ("255.255.255.255", PORT))
             sock.close ()
 
     def get_balance(self):
