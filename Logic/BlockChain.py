@@ -18,6 +18,8 @@ class BlockChain:
 
     def is_valid(self):
         last = None
+        if len(self.blocks) == 1:
+            return True
         for block in self.blocks:
             if not block.is_solved():
                 return False
