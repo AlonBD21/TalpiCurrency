@@ -3,11 +3,11 @@ from Logic.User import User
 import time
 import base64
 
+
 class Transaction:
     SEP = 'ף'
 
-
-    def __init__(self, sender, receiver, amount, time_stamp=int(time.time()),
+    def __init__(self, sender, receiver, amount, time_stamp=int (time.time ()),
                  signature=None):
 
         """
@@ -30,21 +30,21 @@ class Transaction:
         :param string: string in the format of __str__
         :return: new Transaction
         """
-        fields = string.split(cls.SEP)
+        fields = string.split (cls.SEP)
         signature = None
-        if len(fields) == 5:
-            signature = bytes(fields[4], encoding='ascii')
-        return Transaction(bytes(fields[0], encoding='ascii'),
-                           bytes(fields[1], encoding='ascii'),
-                           float(fields[2]), int(fields[3]), signature)
+        if len (fields) == 5:
+            signature = bytes (fields[4], encoding='ascii')
+        return cls (bytes (fields[0], encoding='ascii'),
+                            bytes (fields[1], encoding='ascii'),
+                            float (fields[2]), int (fields[3]), signature)
 
     def __str__(self):
         """
         return string with the data of the transaction
         """
-        fields = [str(self.__sender), str(self.__receiver), str(self.__amount),
-                  str(int(self.__time)), str(self.__signature)]
-        return self.SEP.join(fields)
+        fields = [str (self.__sender), str (self.__receiver), str (self.__amount),
+                  str (int (self.__time)), str (self.__signature)]
+        return self.SEP.join (fields)
 
     def get_amount(self):
         return self.__amount
@@ -61,17 +61,17 @@ class Transaction:
         :param user: credentials of the sender, User
         :return: signature, bytes
         """
-        self.__signature = user.sign(self.__sign_on())
+        self.__signature = user.sign (self.__sign_on ())
 
     def __sign_on(self):
         """
         :return: bytes that represents the data of the transaction to be signed
         """
-        h1 = sha256(self.__sender).digest()
-        h2 = sha256(self.__receiver).digest()
-        h3 = sha256(bytes(str(self.__amount), encoding="ascii")).digest()
-        h4 = sha256(bytes(self.__time)).digest()
-        return sha256(h1 + h2 + h3 + h4).digest()
+        h1 = sha256 (self.__sender).digest ()
+        h2 = sha256 (self.__receiver).digest ()
+        h3 = sha256 (bytes (str (self.__amount), encoding="ascii")).digest ()
+        h4 = sha256 (bytes (self.__time)).digest ()
+        return sha256 (h1 + h2 + h3 + h4).digest ()
 
     def verify(self):
         """
@@ -80,7 +80,7 @@ class Transaction:
         """
         if self.__signature is None:
             return False
-        return User.verify(self.__sign_on(), self.__sender, self.__signature)
+        return User.verify (self.__sign_on (), self.__sender, self.__signature)
 
     def get_sender(self):
         return self.__sender
@@ -98,32 +98,16 @@ class Transaction:
         return self.__amount
 
 
-
-
-
 if __name__ == '__main__':
     import json
     import Support.CryptoJson
-    alice = User.generate()
-    bob = User.generate()
-    trans = Transaction(alice.get_vk_bytes(), bob.get_vk_bytes(), 100.5)
-    trans.sign(alice)
+
+    alice = User.generate ()
+    bob = User.generate ()
+    trans = Transaction (alice.get_vk_bytes (), bob.get_vk_bytes (), 100.5)
+    trans.sign (alice)
     object = trans
 
-    json_string = json.dumps(object,cls=Support.CryptoJson.CryptoEncoder)
-    object = json.loads(json_string, cls=Support.CryptoJson.CryptoDecoder)
-
-
-    print('object to json:')
-    print(string)
-    print("\n\n")
-    print('json to object')
-    print(new_trans)
-    print('\n\n')
-
-
-
-    #print(trans.verify())
-    #new_trans = Transaction.from_string(str(trans))
-    #print(new_trans)
+    json_string = json.dumps (object, cls=Support.CryptoJson.CryptoEncoder)
+    object = json.loads (json_string, cls=Support.CryptoJson.CryptoDecoder)
 
