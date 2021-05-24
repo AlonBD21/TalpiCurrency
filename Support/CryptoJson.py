@@ -41,7 +41,7 @@ class CryptoEncoder(json.JSONEncoder):
                     }
         elif cls_name == BalanceAppliance.__name__:
             return {TYPE_FIELD: cls_name,
-                    "vk": o.get_vk(),
+                    "vk": bytes_to_string(o.get_vk()),
                     "balance": o.get_balance()
                     }
         return super(CryptoEncoder, self).default(o)
@@ -66,7 +66,7 @@ class CryptoDecoder(json.JSONDecoder):
             elif o[TYPE_FIELD] == BlockChain.__name__:
                 return BlockChain(o['blocks'])
             elif o[TYPE_FIELD] == BalanceAppliance.__name__:
-                return BalanceAppliance(o["vk"], o["balance"])
+                return BalanceAppliance(string_to_bytes(o["vk"]), o["balance"])
         return o
 
 
@@ -76,6 +76,14 @@ def bytes_to_string(data):
 
 def string_to_bytes(data):
     return base64.b64decode(data)
+
+
+def dump(obj):
+    return json.dumps(obj, cls=CryptoEncoder)
+
+
+def load(string):
+    return json.loads(string, cls=CryptoDecoder)
 
 
 if __name__ == "__main__":

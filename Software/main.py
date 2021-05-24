@@ -15,7 +15,7 @@ def get_existing_user(sk):
 
 def mine(user):
     server = Server(user)
-    server.start_listening()
+    server.start_server()
 
 
 def trade(user):
@@ -27,7 +27,7 @@ def trade(user):
             amount = input ("how much?")
             client.send_transaction (send_to, amount)
         elif result == "GB":
-            balance = client.get_balance ()
+            balance = client.ask_balance ()
             print ("your balance is", balance, "Coin-ף")
 
 

@@ -19,7 +19,7 @@ class Block:
 
     @classmethod
     def genesis(cls):
-        header = Header.from_transactions(cls.ZEOROS_HASH, None, None)
+        header = Header.from_transactions(cls.ZEOROS_HASH, None, 0, None)
         return cls(header, None)
 
     def __str__(self):
@@ -48,7 +48,7 @@ class Block:
     def is_solved(self):
         h = self.hash()
         hashed = ''.join(format(x, '08b') for x in h)
-        for i in range(self.__header.__n_bits):
+        for i in range(self.__header.get_n_bits()):
             if hashed[i] == '1':
                 return False
         return True

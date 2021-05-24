@@ -7,7 +7,7 @@ class BlockChain:
 
     def __init__(self, blocks):
         if len(blocks) > 0:
-            self.__blocks = blocks  # TODO: maybe we want blocks to be string so that part might need to change
+            self.__blocks = blocks
         else:
             genesis = Block.genesis()
             self.__blocks = [genesis]
@@ -15,6 +15,12 @@ class BlockChain:
     def add_block(self, block):
         if self.can_be_added(block):
             self.__blocks.append(block)
+            return True
+        return False
+
+    @classmethod
+    def genesis_chain(cls):
+        return BlockChain([Block.genesis()])
 
     def is_valid(self):
         last = None
@@ -24,11 +30,10 @@ class BlockChain:
             if not block.is_solved():
                 return False
             if last:
-                if last.hash () != block.__header.__prev_hash:
+                if last.hash() != block.__header.__prev_hash:
                     return False
-            else:
-                last = block
-        return self.check_all_balances ()
+            last = block
+        return self.check_all_balances()
 
     def can_be_added(self, block):
         """
@@ -51,7 +56,6 @@ class BlockChain:
         users = dict()
         for block in self.__blocks:
             transactions = block.get_transactions()
-            trans: Transaction
             if not transactions:
                 continue
             for trans in transactions:
@@ -66,7 +70,7 @@ class BlockChain:
                 users[receiver] += amount
                 users[block.get_header().get_mined_by()] += BlockChain.REWARD
         for balance in users.values():
-            if balance < -100:
+            if balance < -100:  # TODO -100?
                 return False
         return True
 
@@ -79,7 +83,6 @@ class BlockChain:
         balance = 0
         for block in self.__blocks:
             transactions = block.get_transactions()
-            trans: Transaction
             if not transactions:
                 continue
             for trans in transactions:
@@ -123,8 +126,6 @@ if __name__ == '__main__':
     trans.sign(alice)
     bc = BlockChain([])
     ph = bc.last_hash()
-    tries = 10000
-    nonce = bc.find_nonce(alice.get_vk_bytes(), ph, [trans], tries)
     b = Block.from_transactions(nonce, ph, [trans], alice.get_vk_bytes())
     bc.add_block(b)
     print(bc)

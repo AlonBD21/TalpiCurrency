@@ -7,7 +7,7 @@ class Header:
     SEP = ","
 
     def __init__(self, prev_hash, root_hash, nonce, miner,
-                 time_stamp=int(time()), n_bits=10):
+                 time_stamp=int(time()), n_bits=20):
         self.__prev_hash = prev_hash
         self.__root_hash = root_hash
         self.__nonce = nonce
@@ -17,9 +17,9 @@ class Header:
 
     @classmethod
     def from_transactions(cls, prev_hash, transactions, nonce, miner,
-                          time_stamp=int(time()), n_bits=10):
+                          time_stamp=int(time())):
         return cls(prev_hash, cls.create_merkle_root(transactions), nonce,
-                      miner, time_stamp=time_stamp, n_bits=n_bits)
+                      miner, time_stamp=time_stamp)
 
     @classmethod
     def create_merkle_root(cls, transactions):
@@ -49,7 +49,7 @@ class Header:
 
     def __str__(self):
         return str(self.__prev_hash) + Header.SEP + str(
-            self.root_hash) + Header.SEP + str(
+            self.__root_hash) + Header.SEP + str(
             self.__time_stamp) + Header.SEP + \
                str(self.__n_bits) + Header.SEP + str(
             self.__nonce) + Header.SEP + str(self.__miner)
@@ -57,7 +57,7 @@ class Header:
     def __repr__(self):
         return "previous hash: " + str(
             self.__prev_hash) + "\nmerkle hash: " + str(
-            self.root_hash) + "\ntime: " + \
+            self.__root_hash) + "\ntime: " + \
                str(datetime.fromtimestamp(
                    self.__time_stamp)) + "\ntarget: " + str(
             self.__n_bits) + "\nnonce: " + str(
