@@ -115,16 +115,6 @@ class BlockChain:
     def get_blocks(self):
         return self.__blocks
 
-    def find_nonce(vk, prev_hash, transactions):
-        nonce = 0
-        b = Block.from_transactions(nonce, prev_hash, transactions, vk)
-        while True:
-            b.set_nonce(nonce)
-            if b.is_solved():
-                print(nonce)
-                return nonce
-            nonce += 1
-
 
 if __name__ == '__main__':
     alice = User.generate()
@@ -133,7 +123,8 @@ if __name__ == '__main__':
     trans.sign(alice)
     bc = BlockChain([])
     ph = bc.last_hash()
-    nonce = find_nonce(alice.get_vk_bytes(), ph, [trans])
+    tries = 10000
+    nonce = bc.find_nonce(alice.get_vk_bytes(), ph, [trans], tries)
     b = Block.from_transactions(nonce, ph, [trans], alice.get_vk_bytes())
     bc.add_block(b)
     print(bc)

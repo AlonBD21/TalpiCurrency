@@ -40,6 +40,7 @@ class Client:
             sock.sendto (ba_json, ("255.255.255.255", PORT))
             sock.close ()
 
+
         #TODO: FINISH LISTENING
         data, address = self.__socket.recvfrom (4096)
         json_got = data.decode ('utf-8')
