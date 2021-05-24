@@ -9,12 +9,12 @@ class BlockChain:
         if blocks:
             self.blocks = blocks  # TODO: maybe we want blocks to be string so that part might need to change
         else:
-            genesis = Block ()
+            genesis = Block.genesis()
             self.blocks = [genesis]
 
     def add_block(self, block):
-        if self.can_be_added (block):
-            self.blocks.append (block)
+        if self.can_be_added(block):
+            self.blocks.append(block)
 
     def can_be_added(self, block):
         """
@@ -23,27 +23,27 @@ class BlockChain:
         :return: True / False
         """
         last = self.blocks[-1]
-        if last.hash () != block.header.__prev_hash:
+        if last.hash() != block.header.__prev_hash:
             return False
-        if not block.is_solved ():
+        if not block.is_solved():
             return False
-        return self.check_all_balances ()  # returns True if valid, false if not
+        return self.check_all_balances()  # returns True if valid, false if not
 
     def check_all_balances(self):
         """
         that is the function to check all balances for the validity of a block
         :return: TRUE / FALSE
         """
-        users = dict ()
+        users = dict()
         for block in self.blocks:
-            transactions = block.get_transactions ()
+            transactions = block.get_transactions()
             trans: Transaction
             if not transactions:
                 continue
             for trans in transactions:
-                sender = trans.get_sender ()
-                receiver = trans.get_receiver ()
-                amount = trans.get_amount ()
+                sender = trans.get_sender()
+                receiver = trans.get_receiver()
+                amount = trans.get_amount()
                 if sender not in users.keys():
                     users[sender] = 0
                 if receiver not in users.keys():
@@ -51,7 +51,7 @@ class BlockChain:
                 users[sender] -= amount
                 users[receiver] += amount
                 users[block.get_header().get_mined_by()] += BlockChain.REWARD
-        for balance in users.values ():
+        for balance in users.values():
             if balance < -100:
                 return False
         return True
@@ -64,14 +64,14 @@ class BlockChain:
         """
         balance = 0
         for block in self.blocks:
-            transactions = block.get_transactions ()
+            transactions = block.get_transactions()
             trans: Transaction
             if not transactions:
                 continue
             for trans in transactions:
-                sender = trans.get_sender ()
-                receiver = trans.get_receiver ()
-                amount = trans.get_amount ()
+                sender = trans.get_sender()
+                receiver = trans.get_receiver()
+                amount = trans.get_amount()
                 if vk == sender:
                     balance -= amount
                 if vk == receiver:
@@ -81,46 +81,46 @@ class BlockChain:
         return balance
 
     def last_hash(self):
-        return self.blocks[-1].hash ()
+        return self.blocks[-1].hash()
 
     def __len__(self):
-        return len (self.blocks)
+        return len(self.blocks)
 
     def __str__(self):
         s = ""
         for b in self.blocks:
-            s += str (b) + '\n'
+            s += str(b) + '\n'
         return s
 
     def __repr__(self):
         s = ""
         for b in self.blocks:
-            s += repr (b) + '\n'
+            s += repr(b) + '\n'
         return s
 
 
 def find_nonce(vk, prev_hash, transactions):
     nonce = 0
-    b = Block (nonce=nonce, prev_hash=prev_hash, transactions=transactions, mined_by=vk)
+    b = Block.from_transactions(nonce, prev_hash, transactions, vk)
     while True:
-        b.set_nonce (nonce)
-        if b.is_solved ():
-            print (nonce)
+        b.set_nonce(nonce)
+        if b.is_solved():
+            print(nonce)
             return nonce
         nonce += 1
 
 
 if __name__ == '__main__':
-    alice = User.generate ()
-    bob = User.generate ()
-    trans = Transaction (alice.get_vk_bytes (), bob.get_vk_bytes (), 30)
-    trans.sign (alice)
-    bc = BlockChain ()
-    ph = bc.last_hash ()
-    nonce = find_nonce (alice.get_vk_bytes(), ph, [trans])
-    b = Block (nonce, ph, [trans], alice.get_vk_bytes())
-    bc.add_block (b)
-    print (bc)
-    print (repr (bc))
-    print("Alice's balance",bc.check_balance(alice.get_vk_bytes()))
-    print ("Bob's balance",bc.check_balance (bob.get_vk_bytes ()))
+    alice = User.generate()
+    bob = User.generate()
+    trans = Transaction(alice.get_vk_bytes(), bob.get_vk_bytes(), 30)
+    trans.sign(alice)
+    bc = BlockChain()
+    ph = bc.last_hash()
+    nonce = find_nonce(alice.get_vk_bytes(), ph, [trans])
+    b = Block.from_transactions(nonce, ph, [trans], alice.get_vk_bytes())
+    bc.add_block(b)
+    print(bc)
+    print(repr(bc))
+    print("Alice's balance", bc.check_balance(alice.get_vk_bytes()))
+    print("Bob's balance", bc.check_balance(bob.get_vk_bytes()))
