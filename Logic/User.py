@@ -48,10 +48,10 @@ class User:
             return vk.verify(signature, data_bytes)
         except BadSignatureError:
             return False
-            #print("bad signature")
+            # bad signature
         except MalformedPointError:
             return False
-            #print("Length of string does not match lengths of any of the supported encodings of NIST256p curve")
+            # Length of string does not match lengths of any of the supported encodings of NIST256p curve
 
     def get_sk_bytes(self):
         """
