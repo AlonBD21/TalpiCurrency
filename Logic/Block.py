@@ -8,8 +8,8 @@ class Block:
     ZEOROS_HASH = "0" * 32
 
     def __init__(self, header, transactions):
-        self.header = header
-        self.transactions = transactions
+        self.__header = header
+        self.__transactions = transactions
 
     @classmethod
     def from_transactions(cls, nonce, prev_hash, transactions, mined_by):
@@ -23,39 +23,45 @@ class Block:
         return cls(header, None)
 
     def __str__(self):
-        s = str(self.header)
-        if self.transactions:
-            for t in self.transactions:
+        s = str(self.__header)
+        if self.__transactions:
+            for t in self.__transactions:
                 s += Block.SEP + str(t)
         return s
 
     def __repr__(self):
-        s = repr(self.header)
-        if self.transactions:
-            for t in self.transactions:
+        s = repr(self.__header)
+        if self.__transactions:
+            for t in self.__transactions:
                 s += Block.SEP + str(t)
         return s
 
     def set_nonce(self, nonce):
-        self.header.__nonce = nonce
+        self.__header.__nonce = nonce
 
     def get_transactions(self):
-        return self.transactions
+        return self.__transactions
 
     def get_header(self):
-        return self.header
+        return self.__header
 
     def is_solved(self):
         h = self.hash()
         hashed = ''.join(format(x, '08b') for x in h)
-        for i in range(self.header.__n_bits):
+        for i in range(self.__header.__n_bits):
             if hashed[i] == '1':
                 return False
         return True
 
     def hash(self):
-        h1 = sha256(str(self.header).encode()).digest()
-        h2 = sha256(str(self.transactions).encode()).digest()
+        h1 = sha256(str(self.__header).encode()).digest()
+        h2 = sha256(str(self.__transactions).encode()).digest()
         hashed = sha256(str(h1 + h2).encode()).digest()
         return hashed
         # ''.join (format (x, '08b') for x in hashed)  if we want to make it binary
+
+    def get_header(self):
+        return self.__header
+
+    def get_transactions(self):
+        return self.__transactions

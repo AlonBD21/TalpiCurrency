@@ -1,7 +1,7 @@
 from hashlib import sha256
 from Logic.User import User
 import time
-
+import base64
 
 class Transaction:
     SEP = 'ף'
@@ -98,12 +98,32 @@ class Transaction:
         return self.__amount
 
 
+
+
+
 if __name__ == '__main__':
+    import json
+    import Support.CryptoJson
     alice = User.generate()
     bob = User.generate()
     trans = Transaction(alice.get_vk_bytes(), bob.get_vk_bytes(), 100.5)
     trans.sign(alice)
-    print(trans)
-    print(trans.verify())
-    new_trans = Transaction.from_string(str(trans))
+    object = trans
+
+    json_string = json.dumps(object,cls=Support.CryptoJson.CryptoEncoder)
+    object = json.loads(json_string, cls=Support.CryptoJson.CryptoDecoder)
+
+
+    print('object to json:')
+    print(string)
+    print("\n\n")
+    print('json to object')
     print(new_trans)
+    print('\n\n')
+
+
+
+    #print(trans.verify())
+    #new_trans = Transaction.from_string(str(trans))
+    #print(new_trans)
+
