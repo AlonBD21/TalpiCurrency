@@ -43,8 +43,8 @@ class User:
         :param signature: signature (bytes)
         :return:
         """
-        vk = VerifyingKey.from_string(vk, curve=CURVE)
         try:
+            vk = VerifyingKey.from_string (vk, curve=CURVE)
             return vk.verify(signature, data_bytes)
         except BadSignatureError:
             return False
@@ -91,5 +91,5 @@ if __name__ == "__main__":
 
     print(signature)
 
-    # assert User.verify(data, b.get_vk_bytes(), signature)
-    assert User.verify (data, b'asdfghgd', b'asdfgh')
+    print( User.verify(data, b.get_vk_bytes(), signature))
+    print( User.verify (b'cxbnce', b'asdfghgd', signature))
