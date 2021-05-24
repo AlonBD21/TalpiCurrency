@@ -1,4 +1,4 @@
-from ecdsa import SigningKey, VerifyingKey, NIST256p
+from ecdsa import SigningKey, VerifyingKey, NIST256p, BadSignatureError, MalformedPointError
 
 CURVE = NIST256p
 
@@ -43,8 +43,15 @@ class User:
         :param signature: signature (bytes)
         :return:
         """
-        vk = VerifyingKey.from_string(vk, curve=CURVE)
-        return vk.verify(signature, data_bytes)
+        try:
+            vk = VerifyingKey.from_string (vk, curve=CURVE)
+            return vk.verify(signature, data_bytes)
+        except BadSignatureError:
+            return False
+            #print("bad signature")
+        except MalformedPointError:
+            return False
+            #print("Length of string does not match lengths of any of the supported encodings of NIST256p curve")
 
     def get_sk_bytes(self):
         """
@@ -84,4 +91,5 @@ if __name__ == "__main__":
 
     print(signature)
 
-    assert User.verify(data, b.get_vk_bytes(), signature)
+    print( User.verify(data, b.get_vk_bytes(), signature))
+    print( User.verify (b'cxbnce', b'asdfghgd', signature))
