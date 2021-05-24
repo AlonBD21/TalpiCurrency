@@ -10,7 +10,7 @@ from Support import CryptoJson
 import threading
 
 IP = '132.64.143.125'
-PORT = 8020
+PORT = 9953
 BROADCAST = ("255.255.255.255", PORT)
 
 
@@ -19,6 +19,9 @@ class Server(Client):
         Client.__init__(self, user)
         self.__address = (IP, PORT)
         self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.__bd_socket = socket.socket(socket.AF_INET,
+                                         socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+        self.__bd_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         self.__socket.bind(self.__address)
         self.__block_chain = BlockChain.genesis_chain()
         self.__transactions_queue = []

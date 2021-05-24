@@ -88,3 +88,7 @@ def load(string):
 
 if __name__ == "__main__":
     pass
+
+
+def dumps(ba):
+    return None
