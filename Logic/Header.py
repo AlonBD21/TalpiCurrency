@@ -18,7 +18,7 @@ class Header:
     @classmethod
     def from_transactions(cls, prev_hash, transactions, nonce, miner,
                           time_stamp=int(time()), n_bits=10):
-        return Header(prev_hash, cls.create_merkle_root(transactions), nonce,
+        return cls(prev_hash, cls.create_merkle_root(transactions), nonce,
                       miner, time_stamp=time_stamp, n_bits=n_bits)
 
     @classmethod
