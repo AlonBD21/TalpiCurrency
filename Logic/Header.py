@@ -6,21 +6,27 @@ from hashlib import sha256
 class Header:
     SEP = ","
 
-    def __init__(self, prev_hash, transactions, nonce, miner,
+    def __init__(self, prev_hash, root_hash, nonce, miner,
                  time_stamp=int(time()), n_bits=10):
         self.__prev_hash = prev_hash
-        self.__root_hash = self.create_merkle_root(transactions)
+        self.__root_hash = root_hash
         self.__nonce = nonce
         self.__miner = miner
         self.__time_stamp = time_stamp
         self.__n_bits = n_bits
 
+    @classmethod
+    def from_transactions(cls, prev_hash, transactions, nonce, miner,
+                          time_stamp=int(time()), n_bits=10):
+        return Header(prev_hash, cls.create_merkle_root(transactions), nonce,
+                      miner, time_stamp=time_stamp, n_bits=n_bits)
 
-    def create_merkle_root(self, transactions):
+    @classmethod
+    def create_merkle_root(cls, transactions):
         if not transactions:
             return "0" * 32
         else:
-            transactions = self.hash_all(
+            transactions = cls.hash_all(
                 transactions)  # TODO: implement merkle tree
             # width_of_tree = len (transactions)
             # while width_of_tree > 1:
@@ -34,7 +40,8 @@ class Header:
             #     transactions = hashes
             return transactions[0]
 
-    def hash_all(self, transactions):
+    @classmethod
+    def hash_all(cls, transactions):
         hashed = []
         for trans in transactions:
             hashed.append(sha256(str(trans).encode()).digest())
