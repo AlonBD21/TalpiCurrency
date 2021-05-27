@@ -9,8 +9,8 @@ from Software.Client import Client
 from Support import CryptoJson
 import threading
 
-IP = '132.64.143.125'
-PORT = 8020
+IP = '132.64.143.111'
+PORT = 8203
 BROADCAST = ("255.255.255.255", PORT)
 
 

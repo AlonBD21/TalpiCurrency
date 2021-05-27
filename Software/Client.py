@@ -6,8 +6,8 @@ from Logic.Transaction import *
 from Support.CryptoJson import *
 from Logic.BalanceAppliance import *
 
-IP = ""
-PORT = 8020
+IP = "132.64.143.111"
+PORT = 8204
 
 
 class Client:
@@ -17,7 +17,8 @@ class Client:
 
     def broadcast_transaction(self, send_to, amount):
         transaction = Transaction(self.__user.get_vk_bytes(), send_to,
-                                  amount).sign(self.__user)
+                                  amount)
+        transaction.sign(self.__user)
         trans_json = json.dumps(transaction, cls=CryptoEncoder)
         broadcast_json_string(trans_json)
 
@@ -34,7 +35,7 @@ class Client:
         json_string = data.decode('ascii')
         obj = json.loads(json_string, cls=CryptoDecoder)
         if obj.__class__.__name__ is BalanceAppliance.__name__:
-            return obj.ask_balance()
+            return obj.get_balance()
         return -1
 
 
@@ -56,4 +57,4 @@ def broadcast_json_string(json_string):
 if __name__ == "__main__":
     user = User.generate()
     client1 = Client(user)
-    client1.ask_balance()
+    print(client1.ask_balance())

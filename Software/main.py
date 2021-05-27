@@ -1,15 +1,11 @@
 from Logic.User import *
 from Software.Server import *
 from Software.Client import *
-
+from Support.CryptoJson import string_to_bytes
+from Support.CryptoJson import bytes_to_string
 
 def new_user():
     user = User.generate ()
-    return user
-
-
-def get_existing_user(sk):
-    user = User.from_sk_bytes (bytes (sk))
     return user
 
 
@@ -23,9 +19,10 @@ def trade(user):
     while True:
         result = input ("do you want to Send transaction or get Balance? ST/GB")
         if result == "ST":
-            send_to = input ("who do you want it to?")
+            send_to = input ("who do you want to send it to?")
+            send_to = string_to_bytes(send_to)
             amount = input ("how much?")
-            client.send_transaction (send_to, amount)
+            client.broadcast_transaction (send_to, amount)
         elif result == "GB":
             balance = client.ask_balance ()
             print ("your balance is", balance, "Coin-ף")
@@ -36,9 +33,10 @@ def retrive_user():
     result = input ("do you already have a user? Y/N")
     if result == "N":
         user = new_user ()
+        print ("This is your secret key, write it somewhere safe:", bytes_to_string(user.get_sk_bytes ()))
     elif result == "Y":
         sk = input ("enter secret key:")
-        user = get_existing_user (sk)
+        user = User.from_sk_bytes (string_to_bytes(sk))
     elif result == "q":
         return None
     return user
