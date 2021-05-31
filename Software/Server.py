@@ -1,6 +1,8 @@
 import socket
 
 from Logic.BalanceAppliance import BalanceAppliance
+from Support.CryptoJson import bytes_to_string
+from Support.CryptoJson import string_to_bytes
 from Logic.Block import Block
 from Logic.BlockChain import BlockChain
 from Logic.Transaction import Transaction
@@ -9,8 +11,8 @@ from Software.Client import Client
 from Support import CryptoJson
 import threading
 
-IP = '132.64.143.125'
-PORT = 9953
+IP = '132.64.143.89'
+PORT = 8204
 BROADCAST = ("255.255.255.255", PORT)
 
 
@@ -32,6 +34,7 @@ class Server(Client):
     def listen(self):
         while True:
             data, address = self.__socket.recvfrom(4096)
+            print(data.decode("ascii"))
             obj = CryptoJson.load(data.decode('ascii'))
             if isinstance(obj, BlockChain):
                 self.update_block_chain(obj)
@@ -45,7 +48,7 @@ class Server(Client):
             elif isinstance(obj, BalanceAppliance):
                 vk = obj.get_vk()
                 obj.set_balance(self.find_balance(vk))
-                self.send_bytes(bytes(CryptoJson.dump(obj),"ascii"),address)
+                self.send_bytes(bytes(CryptoJson.dump(obj),"ascii"),(address[0],PORT))
 
             else:
                 print("GOT UNCLASSIFIED DATA FROM", IP, "  -  ", obj)
@@ -57,7 +60,6 @@ class Server(Client):
                 transactions = []
             else:
                 transactions = [self.__transactions_queue[0]]
-
             b = Block.from_transactions(nonce,
                                         self.__block_chain.last_hash(),
                                         transactions,
@@ -69,6 +71,7 @@ class Server(Client):
                 b.set_nonce(nonce)
                 if b.is_solved():
                     added = self.__block_chain.add_block(b)
+                    print("solved")
                     if added:
                         print("Found new block! publishing...")
                         if len(transactions) > 0:
@@ -79,7 +82,6 @@ class Server(Client):
                             BROADCAST)
 
                         break
-
                 nonce += 1
 
     def start_server(self):
@@ -107,6 +109,7 @@ class Server(Client):
 
 if __name__ == '__main__':
     miner = User.generate()
+    print(bytes_to_string(miner.get_vk_bytes()))
     server = Server(miner)
     server.start_server()
 

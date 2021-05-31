@@ -4,8 +4,8 @@ from Logic.Transaction import Transaction
 from Support import CryptoJson
 from Logic.BalanceAppliance import BalanceAppliance
 
-IP = "127.0.0.1"
-PORT = 9920
+IP = "132.64.143.89"
+PORT = 8203
 ADDRESS = (IP, PORT)
 BROADCAST = ('255.255.255.255', 0)
 

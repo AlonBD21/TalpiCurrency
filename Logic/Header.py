@@ -7,7 +7,7 @@ class Header:
     SEP = ","
 
     def __init__(self, prev_hash, root_hash, nonce, miner,
-                 time_stamp=int(time()), n_bits=20):
+                 time_stamp=int(time()), n_bits=10):
         self.__prev_hash = prev_hash
         self.__root_hash = root_hash
         self.__nonce = nonce
@@ -77,6 +77,9 @@ class Header:
 
     def get_n_bits(self):
         return self.__n_bits
+
+    def set_nonce(self, nonce):
+        self.__nonce = nonce
 
     def get_time_stamp(self):
         return self.__time_stamp

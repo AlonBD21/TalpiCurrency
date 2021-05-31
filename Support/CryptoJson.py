@@ -1,6 +1,5 @@
 import json
 from Logic.Transaction import Transaction
-from Logic.User import User
 import base64
 from Logic.Block import Block
 from Logic.BlockChain import BlockChain
@@ -44,7 +43,8 @@ class CryptoEncoder(json.JSONEncoder):
                     "vk": bytes_to_string(o.get_vk()),
                     "balance": o.get_balance()
                     }
-        return super(CryptoEncoder, self).default(o)
+        default_encoder = json.JSONEncoder()
+        return default_encoder.default(o)
 
 
 class CryptoDecoder(json.JSONDecoder):
@@ -58,7 +58,7 @@ class CryptoDecoder(json.JSONDecoder):
                 return Transaction(o['sender'], o['receiver'], o['amount'],
                                    o['time'], o['signature'])
             elif o[TYPE_FIELD] == Header.__name__:
-                return Header(o['prev_hash'], o['root_hash'], o['nonce'],
+                return Header(string_to_bytes(o['prev_hash']), string_to_bytes(o['root_hash']), o['nonce'],
                               o['miner'], time_stamp=o['time_stamp'],
                               n_bits=o['n_bits'])
             elif o[TYPE_FIELD] == Block.__name__:

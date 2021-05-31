@@ -1,8 +1,7 @@
-from Logic.Header import *
-from Logic.Transaction import *
+from Logic.Header import Header
+import Support.CryptoJson
+from hashlib import sha256
 
-
-# TODO: make vavibles private in all classes
 class Block:
     SEP = "ץ"
     ZEOROS_HASH = "0" * 32
@@ -19,7 +18,8 @@ class Block:
 
     @classmethod
     def genesis(cls):
-        header = Header.from_transactions(cls.ZEOROS_HASH, None, 0, None)
+        header = Header.from_transactions(Support.CryptoJson.string_to_bytes(cls.ZEOROS_HASH),
+                                          None, 0, None)
         return cls(header, None)
 
     def __str__(self):
@@ -37,7 +37,7 @@ class Block:
         return s
 
     def set_nonce(self, nonce):
-        self.__header.__nonce = nonce
+        self.__header.set_nonce(nonce)
 
     def get_transactions(self):
         return self.__transactions

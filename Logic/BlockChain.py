@@ -42,7 +42,7 @@ class BlockChain:
         :return: True / False
         """
         last = self.__blocks[-1]
-        if last.hash() != block.__header.__prev_hash:
+        if last.hash() != block.get_header().get_prev_hash():
             return False
         if not block.is_solved():
             return False
