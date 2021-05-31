@@ -53,7 +53,7 @@ def retrive_user():
     if result == "N":
         user = new_user ()
         print (
-            f"{Fore.LIGHTBLACK_EX}This is your secret key, write it somewhere safe:\n{bytes_to_string (user.get_sk_bytes ())}")
+            f"{Fore.LIGHTBLUE_EX}This is your secret key, write it somewhere safe:\n{bytes_to_string (user.get_sk_bytes ())}")
     elif result == "Y":
         sk = input (f"{Fore.BLUE}enter secret key: ")
         if sk in "Qq":
@@ -97,5 +97,5 @@ if __name__ == "__main__":
     print (f"{Fore.LIGHTCYAN_EX}-------------------")
     print (f"{Style.BRIGHT}{Fore.CYAN}Wellcome to {MONEY}")
     print (f"{Fore.LIGHTCYAN_EX}-------------------")
-    print (f"{Style.BRIGHT}{Fore.LIGHTBLACK_EX}at any time, if you want to exit press q")
+    print (f"{Style.BRIGHT}{Fore.LIGHTBLUE_EX}at any time, if you want to exit press q")
     begin_with_new_user ()
