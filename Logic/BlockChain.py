@@ -82,6 +82,8 @@ class BlockChain:
         """
         balance = 0
         for block in self.__blocks:
+            if block.get_header().get_miner() == vk:
+                balance += BlockChain.REWARD
             transactions = block.get_transactions()
             if not transactions:
                 continue
