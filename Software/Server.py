@@ -1,21 +1,21 @@
 import socket
 
+from Software.constants import PORT, ADDRESS, IP, BROADCAST
 from Logic.BalanceAppliance import BalanceAppliance
 from Support.CryptoJson import bytes_to_string
-from Support.CryptoJson import string_to_bytes
 from Logic.Block import Block
 from Logic.BlockChain import BlockChain
 from Logic.Transaction import Transaction
 from Logic.User import User
-from Software.Client import Client
 from Support import CryptoJson
+from Software.Client import Client
 import threading
-from Software.main import PORT, IP, ADDRESS, BROADCAST
+from time import sleep
 
 
-class Server(Client):
+class Server:
     def __init__(self, user):
-        Client.__init__(self, user)
+        self.__user = user
         self.__address = (IP, PORT)
         self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.__bd_socket = socket.socket(socket.AF_INET,
@@ -45,7 +45,8 @@ class Server(Client):
             elif isinstance(obj, BalanceAppliance):
                 vk = obj.get_vk()
                 obj.set_balance(self.find_balance(vk))
-                self.send_bytes(bytes(CryptoJson.dump(obj),"ascii"),(address[0],PORT))
+                self.send_bytes(bytes(CryptoJson.dump(obj), "ascii"),
+                                (address[0], PORT))
 
             else:
                 print("GOT UNCLASSIFIED DATA FROM", IP, "  -  ", obj)
@@ -73,10 +74,13 @@ class Server(Client):
                         print("Found new block! publishing...")
                         if len(transactions) > 0:
                             self.__transactions_queue.pop(0)
-
-                        self.send_bytes(
-                            bytes(CryptoJson.dump(self.__block_chain),"ascii"),
-                            BROADCAST)
+                        # self.send_bytes(
+                        #     bytes(CryptoJson.dump(self.__block_chain),
+                        #           "ascii"),
+                        #     BROADCAST)
+                        self.__bd_socket.sendto(
+                            bytes(CryptoJson.dump(self.__block_chain),
+                                  "ascii"), BROADCAST)
 
                         break
                 nonce += 1
@@ -84,6 +88,7 @@ class Server(Client):
     def start_server(self):
         self.__mine_thread.start()
         self.__listen_thread.start()
+        sleep(120)
 
     def update_block_chain(self, bc):
         if bc.is_valid() and len(bc) > len(self.__block_chain):
@@ -91,6 +96,9 @@ class Server(Client):
             self.__transactions_queue = []
             return True
         return False
+
+    def get_user(self):
+        return self.__user
 
     def find_balance(self, vk):
         return self.__block_chain.check_balance(vk)
@@ -101,7 +109,7 @@ class Server(Client):
 
     @classmethod
     def make_daemon(cls, func, *args):
-        return threading.Thread(target=func, args=args, daemon=False)
+        return threading.Thread(target=func, args=args, daemon=True)
 
 
 if __name__ == '__main__':
@@ -109,4 +117,3 @@ if __name__ == '__main__':
     print(bytes_to_string(miner.get_vk_bytes()))
     server = Server(miner)
     server.start_server()
-

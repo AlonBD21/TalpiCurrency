@@ -12,7 +12,6 @@ TYPE_FIELD = '_type'
 class CryptoEncoder(json.JSONEncoder):
     def default(self, o):
         cls_name = o.__class__.__name__
-        print(cls_name)
         if cls_name == Transaction.__name__:
             return {TYPE_FIELD: cls_name,
                     "sender": bytes_to_string(o.get_sender()),

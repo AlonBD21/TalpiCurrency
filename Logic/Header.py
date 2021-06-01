@@ -3,12 +3,11 @@ from datetime import datetime
 from hashlib import sha256
 from Support import CryptoJson
 
-
 class Header:
     SEP = ","
 
     def __init__(self, prev_hash, root_hash, nonce, miner,
-                 time_stamp=int(time()), n_bits=10):
+                 time_stamp=int(time()), n_bits=18):
         self.__prev_hash = prev_hash
         self.__root_hash = root_hash
         self.__nonce = nonce
@@ -19,8 +18,10 @@ class Header:
     @classmethod
     def from_transactions(cls, prev_hash, transactions, nonce, miner,
                           time_stamp=int(time())):
+        if miner == None:
+            miner = CryptoJson.string_to_bytes("miner0==")
         return cls(prev_hash, cls.create_merkle_root(transactions), nonce,
-                      miner, time_stamp=time_stamp)
+                   miner, time_stamp=time_stamp)
 
     @classmethod
     def create_merkle_root(cls, transactions):

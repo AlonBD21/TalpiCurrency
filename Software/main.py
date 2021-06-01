@@ -1,6 +1,6 @@
-from Logic.User import *
-from Software.Server import *
-from Software.Client import *
+from Logic.User import User
+from Software.Server import Server
+from Software.Client import Client
 from Support.CryptoJson import string_to_bytes
 from Support.CryptoJson import bytes_to_string
 import colorama
@@ -12,11 +12,6 @@ colorama.init (autoreset=True)
 
 MONEY = f"{Back.WHITE}{Style.BRIGHT}{Fore.LIGHTMAGENTA_EX}ף-Coin!"
 YES_NO = F"{Fore.GREEN}Y{Fore.WHITE}{Style.BRIGHT}/{Fore.RED}N"
-
-PORT = 3333
-IP = "132.64.143.125"
-ADDRESS = (IP, PORT)
-BROADCAST = ('255.255.255.255', 0)
 
 def new_user():
     user = User.generate ()

@@ -3,7 +3,7 @@ from Logic.User import User
 from Logic.Transaction import Transaction
 from Support import CryptoJson
 from Logic.BalanceAppliance import BalanceAppliance
-from Software.main import PORT, IP, ADDRESS, BROADCAST
+from Software.constants import PORT, IP, ADDRESS, BROADCAST
 
 
 
