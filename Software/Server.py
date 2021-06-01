@@ -16,7 +16,7 @@ from time import sleep
 class Server:
     def __init__(self, user):
         self.__user = user
-        self.__address = (IP, PORT)
+        self.__address = ADDRESS
         self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.__bd_socket = socket.socket(socket.AF_INET,
                                          socket.SOCK_DGRAM, socket.IPPROTO_UDP)
@@ -31,13 +31,19 @@ class Server:
     def listen(self):
         while True:
             data, address = self.__socket.recvfrom(4096)
+            if address[0] == IP: continue
+            print("PRINTING NEW DATA FROM ", address)
+            print("~"*50)
             print(data.decode("ascii"))
+            print("~"*50)
             obj = CryptoJson.load(data.decode('ascii'))
             if isinstance(obj, BlockChain):
+                print("got new blockchain from other node... updating")
                 self.update_block_chain(obj)
                 self.__notify_mine = True
 
             elif isinstance(obj, Transaction):
+                print("recieved transaction... updating")
                 self.__transactions_queue.append(obj)
                 if len(self.__transactions_queue) == 1:
                     self.__notify_mine = True
