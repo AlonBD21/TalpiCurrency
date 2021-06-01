@@ -1,6 +1,7 @@
 from time import time
 from datetime import datetime
 from hashlib import sha256
+from Support import CryptoJson
 
 
 class Header:
@@ -24,7 +25,8 @@ class Header:
     @classmethod
     def create_merkle_root(cls, transactions):
         if not transactions:
-            return "0" * 32
+
+            return CryptoJson.string_to_bytes("0" * 32)
         else:
             transactions = cls.hash_all(
                 transactions)  # TODO: implement merkle tree

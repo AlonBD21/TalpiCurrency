@@ -12,6 +12,7 @@ TYPE_FIELD = '_type'
 class CryptoEncoder(json.JSONEncoder):
     def default(self, o):
         cls_name = o.__class__.__name__
+        print(cls_name)
         if cls_name == Transaction.__name__:
             return {TYPE_FIELD: cls_name,
                     "sender": bytes_to_string(o.get_sender()),
@@ -25,8 +26,8 @@ class CryptoEncoder(json.JSONEncoder):
                     "prev_hash": bytes_to_string(o.get_prev_hash()),
                     "root_hash": bytes_to_string(o.get_root_hash()),
                     "nonce": o.get_nonce(),
-                    "miner": o.get_nonce(),
-                    "time_stamp": o.get_miner(),
+                    "miner": bytes_to_string(o.get_miner()),
+                    "time_stamp": o.get_time_stamp(),
                     "n_bits": o.get_n_bits()
                     }
         elif cls_name == Block.__name__:

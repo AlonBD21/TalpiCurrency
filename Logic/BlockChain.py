@@ -120,15 +120,4 @@ class BlockChain:
 
 
 if __name__ == '__main__':
-    alice = User.generate()
-    bob = User.generate()
-    trans = Transaction(alice.get_vk_bytes(), bob.get_vk_bytes(), 30)
-    trans.sign(alice)
-    bc = BlockChain([])
-    ph = bc.last_hash()
-    b = Block.from_transactions(nonce, ph, [trans], alice.get_vk_bytes())
-    bc.add_block(b)
-    print(bc)
-    print(repr(bc))
-    print("Alice's balance", bc.check_balance(alice.get_vk_bytes()))
-    print("Bob's balance", bc.check_balance(bob.get_vk_bytes()))
+    pass
