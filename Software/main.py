@@ -13,6 +13,10 @@ colorama.init (autoreset=True)
 MONEY = f"{Back.WHITE}{Style.BRIGHT}{Fore.LIGHTMAGENTA_EX}ף-Coin!"
 YES_NO = F"{Fore.GREEN}Y{Fore.WHITE}{Style.BRIGHT}/{Fore.RED}N"
 
+PORT = 3333
+IP = "132.64.143.125"
+ADDRESS = (IP, PORT)
+BROADCAST = ('255.255.255.255', 0)
 
 def new_user():
     user = User.generate ()

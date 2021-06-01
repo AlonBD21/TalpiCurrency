@@ -10,10 +10,7 @@ from Logic.User import User
 from Software.Client import Client
 from Support import CryptoJson
 import threading
-
-IP = '132.64.143.111'
-PORT = 8205
-BROADCAST = ("255.255.255.255", PORT)
+from Software.main import PORT, IP, ADDRESS, BROADCAST
 
 
 class Server(Client):
