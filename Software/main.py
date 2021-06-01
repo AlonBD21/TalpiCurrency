@@ -57,7 +57,8 @@ def retrive_user():
     if result == "N":
         user = new_user ()
         print (
-            f"{Fore.LIGHTBLUE_EX}This is your secret key, write it somewhere safe:\n{bytes_to_string (user.get_sk_bytes ())}")
+            f"{Fore.LIGHTRED_EX}This is your secret key, write it somewhere safe:\n{bytes_to_string (user.get_sk_bytes ())}")
+        print(f"{Fore.LIGHTBLUE_EX}This is your public key:\n{bytes_to_string(user.get_vk_bytes())}")
     elif result == "Y":
         sk = input (f"{Fore.BLUE}enter secret key: ")
         if sk in "Qq":
