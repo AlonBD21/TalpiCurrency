@@ -31,12 +31,16 @@ class Client:
         ba_json = CryptoJson.dump(ba)
         self.__bd_socket.sendto(bytes(ba_json, 'ascii'), BROADCAST)
 
-        data, address = self.__bd_socket.recvfrom(4096)
-        json_string = data.decode('ascii')
-        obj = CryptoJson.dump(json_string)
-        if obj.__class__.__name__ is BalanceAppliance.__name__:
-            return obj.ask_balance()
-        return -1
+        data, address = self.__bd_socket.recvfrom (4096)
+        json_string = data.decode ('ascii')
+        obj = CryptoJson.dump (json_string)
+        while obj.__class__.__name__ != BalanceAppliance.__name__:
+            data, address = self.__bd_socket.recvfrom(4096)
+            json_string = data.decode('ascii')
+            print(json_string)
+            obj = CryptoJson.load(json_string)
+        return obj.get_balance()
+
 
 
 # # TODO add broadcast bytes function
